@@ -1,0 +1,6 @@
+# Ignore
+**
+
+# Allow
+!/src/**
+!/package*.json
