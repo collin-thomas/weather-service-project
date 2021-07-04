@@ -1,0 +1,1 @@
+GET https://api.openweathermap.org/data/2.5/onecall?lat=5&lon=5&exclude=minutely,hourly,daily&units=imperial&appid=

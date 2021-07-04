@@ -1,8 +1,8 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 const express = require('express')
 const cors = require('cors')
-const errorHandler = require('/utils/errorHandler')
-const routes = require('/routes')
+const errorHandler = require('./middleware/errorHandler')
+const { HTTPError } = require('./utils/error')
 
 // env vars
 const EXPRESS_HOST = process.env.EXPRESS_HOST || '0.0.0.0'
@@ -13,8 +13,18 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
+// log requests
+if (process.env.VERBOSE === 'true') {
+  app.use(require('morgan')('dev'))
+}
+
 // routes
-app.use('/', routes)
+app.use('/weather', require('./routes/weather'))
+
+// 404 handling
+app.use((req, res, next) => {
+  next(HTTPError.NOT_FOUND)
+})
 
 // must be after all routes
 app.use(errorHandler)

@@ -1,14 +1,14 @@
-const ValidateWeather = require('../../src/validators/weather')
+const WeatherValidation = require('../../src/validators/weather')
 
-describe('ValidateWeather.get', () => {
+describe('WeatherValidation.get', () => {
   test('With correct values', () => {
-    const valid = ValidateWeather.get({ lat: '33.44', lon: '-94.04' })
-    expect(valid).toBe(true)
+    expect(WeatherValidation.get({ lat: '33.44', lon: '-94.04' })).toBe(true)
   })
 
   test('Without correct values', () => {
-    expect(ValidateWeather.get({ lat: '33.44', wrong: '-94.04' })).toBe(false)
-    expect(ValidateWeather.get({ lat: '33.44' })).toBe(false)
-    expect(ValidateWeather.get()).toBe(false)
+    expect(WeatherValidation.get({ lat: '33.44', wrong: '-94.04' })).toBe(false)
+    expect(WeatherValidation.get({ lat: '33.44' })).toBe(false)
+    expect(WeatherValidation.get()).toBe(false)
+    expect(WeatherValidation.get({ lat: 'string', lon: '-94.04' })).toBe(false)
   })
 })

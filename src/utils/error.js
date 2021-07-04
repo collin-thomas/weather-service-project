@@ -12,18 +12,15 @@ class ValidationError extends Error {
 }
 
 class HTTPError extends Error {
-  constructor(message, status) {
+  constructor(status, message) {
     super(message)
     this.name = this.constructor.name
     this.status = status
   }
 }
 
-HTTPError.BAD_REQUEST = new HTTPError('Bad Request', 400)
-HTTPError.UNAUTHORIZED = new HTTPError('Unauthorized', 401)
-HTTPError.FORBIDDEN = new HTTPError('Forbidden', 403)
-HTTPError.NOT_FOUND = new HTTPError('Not Found', 404)
-HTTPError.ValidationError = new HTTPError('ValidationError', 400)
+HTTPError.UNAUTHORIZED = new HTTPError(401, 'Unauthorized')
+HTTPError.NOT_FOUND = new HTTPError(404, 'Not Found')
 
 module.exports = {
   ValidationError,

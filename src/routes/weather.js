@@ -1,17 +1,21 @@
 const router = require('express').Router()
 const asyncWrap = require('../utils/asyncWrap')
 const Weather = require('../services/weather')
-const ValidateWeather = require('../validators/weather')
+const WeatherValidation = require('../validators/weather')
 const { ValidationError } = require('../utils/error')
+const { requiresApiKey } = require('../middleware/auth')
 
 router.get(
   '/',
+  requiresApiKey,
   asyncWrap(async (req, res) => {
-    const valid = ValidateWeather.get(req.query)
+    const valid = WeatherValidation.get(req.query)
     if (!valid) {
-      throw new ValidationError('Workflow not found', 400)
+      throw new ValidationError('Invalid or Missing Coordinates', 400)
     }
     const weather = await Weather.get(req.query)
-    res.success(weather)
+    res.json(weather)
   }),
 )
+
+module.exports = router

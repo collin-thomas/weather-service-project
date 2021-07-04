@@ -1,0 +1,1 @@
+GET http://localhost:3000/weather?lat=47.80960332021122&lon=13.0526573787743884&api_key=

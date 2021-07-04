@@ -10,15 +10,27 @@ The API can be found here: <https://openweathermap.org/api>. The one-call api re
 
 ### Summary of Response
 
-- Wether Condition (Snow, Rain, etc)
-- Feels (Hot, Cold, Moderate)
-- Wether alerts and description of each alert
+- Weather Condition (Snow, Rain, etc)
+- Temperature (Hot, Moderate, Cold)
+- Weather alerts and description of each alert
 
 ## Usage
 
 ### Route Syntax
 
-GET /weather?lat={lat}&lon={lon}&api_key={api_key}
+`GET /weather?lat={lat}&lon={lon}&api_key={api_key}`
+
+## Environment Variables
+
+Copy `.env` to create `.env.development` and `.env.production`. Then enter the `OPEN_WEATHER_API_KEY`.
+
+If we had CI/CD we would have the environment variables securely stored in the cloud and create the `.env.*` file or k8s ConfigMap as part of the pipeline.
+
+### Obtaining an API Key
+
+1. Sign up for OpenWeather
+2. Get your key from here: <https://home.openweathermap.org/api_keys>
+3. Subscribe to `One Call API` here: <https://openweathermap.org/api>
 
 ## Test
 
@@ -30,29 +42,39 @@ npm test
 npm run test:watch
 ```
 
-## Environment Variables
+## Run without Docker
 
-Copy `.env` to create `.env.development` and `.env.production`. Then enter the `OPEN_WEATHER_API_KEY`.
+First, setup Environment Variables.
 
-If we had CI/CD we would have the environment variables securely stored in the cloud and create the `.env.*` files are part of the pipeline.
+```sh
+npm install
 
-## Build Locally
+npm run development
+# or
+npm run production
+```
+
+## Docker
+
+### Build Locally
 
 ```sh
 docker build --target development -t weather-service-project:1.0.0-development .
 docker build --target production -t weather-service-project:1.0.0-production .
 ```
 
-## Run
-
 ### Run Development
+
+Docker will take care of all dependencies, you don't even need node installed on your machine. This is using `nodemon` and exposes the debugger port to connect to VSCode.
 
 ```sh
 docker run \
     --rm \
     -p 3000:3000 \
     -p 9299:9299 \
-    -v "`pwd`/app:/app" \
+    -v `pwd`/src:/app/src \
+    -v `pwd`/package.json:/app/package.json \
+    -v `pwd`/.env.development:/app/.env.development \
     --name weather-service-project \
     weather-service-project:1.0.0-development
 ```
@@ -63,13 +85,7 @@ docker run \
 docker run \
     --rm \
     -p 3000:3000 \
+    --env-file .env.production \
     --name weather-service-project \
-    weather-service-project:1.0.0-development
-```
-
-### Run without Docker
-
-```sh
-npm install
-npm run production
+    weather-service-project:1.0.0-production
 ```

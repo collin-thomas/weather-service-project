@@ -3,4 +3,5 @@
 
 # Allow
 !/src/**
-!/package*.json
+!/package.json
+!/docker-entrypoint.sh
